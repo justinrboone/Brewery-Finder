@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brewery Finder</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+  <body>
+      
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="nav">
+      <div class="container">
+          <a class="navbar-brand" href="#"><img src="images/beer-glass-xxl.png"</a>
+          <a class="navbar-brand" href="#">Brewery Finder</a>
+          <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="toggleList()">Menu</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Map -->
+    <div class="col-md-12 col-xs-12" id="map-container">
+      <div id="map">
+      </div>
+    </div>
+    
+    <!-- Filter and list -->
+    <div class="col-md-3 col-xs-9 hidden" id="list-view">
+      <form class="" role="search">
+          <div class="form-group input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
+            <input type="text" class="form-control" placeholder="Brewery Name" data-bind="" autocomplete="off">
+          </div>
+        </form>
+      <div class="panel panel-default">
+        <div class="panel-heading">Breweries</div>
+          <div class="panel-body list-group" data-bind="foreach: ">
+              <a href="#" class="list-group-item" data-bind="text: , click: "></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load scripts -->
+    <script src="libs/jquery.min.js"></script>
+    <script src="libs/knockout-3.4.0.js"></script>
+    <script src="js/app.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhVCn9fj2AN33zea8HXS4sh7UlX6NQ3o8&libraries=places&callback=init"></script>
+
+    
+  </body>
+</html>
