@@ -15,7 +15,7 @@
       <div class="container">
           <a class="navbar-brand" href="#"><img src="images/beer-glass-xxl.png"</a>
           <a class="navbar-brand" href="#">Brewery Finder</a>
-          <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="toggleList()">Menu</button>
+          <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="">Menu</button>
         </div>
       </div>
     </nav>
@@ -36,8 +36,8 @@
         </form>
       <div class="panel panel-default">
         <div class="panel-heading">Breweries</div>
-          <div class="panel-body list-group" data-bind="foreach: ">
-              <a href="#" class="list-group-item" data-bind="text: , click: "></a>
+          <div class="panel-body list-group" data-bind="foreach: breweries">
+              <a href="#" class="list-group-item" data-bind="text: name, click: "></a>
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@
     <script src="libs/jquery.min.js"></script>
     <script src="libs/knockout-3.4.0.js"></script>
     <script src="js/app.js"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhVCn9fj2AN33zea8HXS4sh7UlX6NQ3o8&libraries=places&callback=init"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhVCn9fj2AN33zea8HXS4sh7UlX6NQ3o8&libraries=places&callback=app.init"></script>
 
     
   </body>
