@@ -5,8 +5,8 @@ function init() {
 
 	function Brewery(data) {
 		this.name = data.name;
-		this.address = this.formatted_address;
-		this.rating = this.rating;
+		this.address = data.formatted_address;
+		this.rating = data.rating;
 		this.infowindow = {};
 		this.marker = {};
 	}
