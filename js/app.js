@@ -2,7 +2,19 @@
 function init() {
 	var map;
 	var infowindow;
-	var locations = [];
+
+	function Brewery(data) {
+		this.name = data.name;
+		this.address = this.formatted_address;
+		this.rating = this.rating;
+		this.infowindow = {};
+		this.marker = {};
+	}
+
+	function listViewModel() {
+		breweries = ko.observableArray();
+		console.log(breweries());
+	}
 
 	function initMap() {
 	  var seattle = {lat: 47.6097, lng: -122.3331};
@@ -26,7 +38,9 @@ function init() {
 	function callback(results, status) {
 	  if (status === google.maps.places.PlacesServiceStatus.OK) {
 	    for (var i = 0; i < results.length; i++) {
-	      createMarker(results[i]);	
+	      createMarker(results[i]);
+	      var brewery = new Brewery(results[i]);
+	      breweries().push(brewery);
 	    }
 	  }
 	}
@@ -55,7 +69,7 @@ function init() {
 	}
 
 	initMap();
-	console.log(locations);
+	ko.applyBindings(new listViewModel);
 }
 
 // Show and hide the filter input field and list of breweries.
