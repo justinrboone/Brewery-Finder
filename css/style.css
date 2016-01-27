@@ -19,5 +19,6 @@
 	z-index: 1;
 	padding-top: 60px;
 	height: 750px;
+	overflow: scroll;
 }
 

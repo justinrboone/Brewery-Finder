@@ -31,7 +31,7 @@
       <form class="" role="search">
           <div class="form-group input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
-            <input type="text" class="form-control" placeholder="Brewery Name" data-bind="" autocomplete="off">
+            <input type="search" class="form-control" placeholder="Brewery Name" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
           </div>
         </form>
       <div class="panel panel-default">
@@ -47,7 +47,7 @@
     <script src="libs/jquery.min.js"></script>
     <script src="libs/knockout-3.4.0.js"></script>
     <script src="js/app.js"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhVCn9fj2AN33zea8HXS4sh7UlX6NQ3o8&libraries=places&callback=init"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhVCn9fj2AN33zea8HXS4sh7UlX6NQ3o8&libraries=places&callback=app"></script>
 
     
   </body>
