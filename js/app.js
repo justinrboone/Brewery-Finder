@@ -1,4 +1,5 @@
 function app() {
+	
 	// Create brewery objects.
 	var Brewery = function(data) {
 		var self = this;
@@ -8,65 +9,72 @@ function app() {
 		self.marker = new google.maps.Marker({
 			position: data.geometry.location,
 			map: map,
+			animation: null,
 			title: data.name
 		});
+		
 		google.maps.event.addListener(self.marker, 'click', function() {
 			infowindow.setContent('<div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
 			infowindow.open(map, this);
+			if (self.marker.getAnimation() !== null) {
+			    self.marker.setAnimation(null);
+			} else {
+			    self.marker.setAnimation(google.maps.Animation.BOUNCE);
+			}
 		});
 	}
 
+	// Create an array to store data from Google.
 	var locations = [];
 
+	// Set location for center of map and search.
 	var seattle = {lat: 47.6097, lng: -122.3331};
 	
+	// Create the map.
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center: seattle,
 		zoom: 12,
 		scrollwheel: false
 		});
 
-		infowindow = new google.maps.InfoWindow();
+	// Create Info Windows.
+	infowindow = new google.maps.InfoWindow();
 
-		var service = new google.maps.places.PlacesService(map);
-			service.nearbySearch({
+	// Request Places data from Google.
+	var service = new google.maps.places.PlacesService(map);
+		service.nearbySearch({
 			location: seattle,
 			radius: 7500,
 			keyword: ['brewery']
-			}, callback);
+		}, callback);
 
-		function callback(results, status) {
-			if (status === google.maps.places.PlacesServiceStatus.OK) {
-				for (var i = 0; i < results.length; i++) {
-				  	locations.push((results[i]));
-				}
-				console.log(locations);
-				viewModel.createList();
+	// Add Places data to the model (locations array) after it is received.
+	function callback(results, status) {
+		if (status === google.maps.places.PlacesServiceStatus.OK) {
+			for (var i = 0; i < results.length; i++) {
+			  	locations.push((results[i]));
 			}
+			viewModel.createList();
 		}
-
-		
+	}	
 
 	// ViewModel
 	var viewModel = {
 		
+		// Create a list of breweries
 		breweries: ko.observableArray([]),
 
+		// Temporarily store input from list filter
+		query: ko.observable(''),
+
+		// Create Brewery objects from the Google places data and add them to the list.
 		createList: function() {
 			for(var x in locations) {
 				viewModel.breweries.push(new Brewery(locations[x]));
 			}
-			console.log(viewModel.breweries());
 		},
 
-		query: ko.observable(''),
-
-		displayMarkers: function() {
-			for(var x in viewModel.breweries) {
-				viewModel.breweries[x].marker.visible = true;
-			}
-		},
-
+		// Filter the brewery list and map markers based on user input.
 		search: function(value) {
 			viewModel.removeMarkers();
 			viewModel.breweries.removeAll();
@@ -78,24 +86,11 @@ function app() {
 		  	}
 		},
 
-		addMarkers: function() {
-			for(var i = 0; i < viewModel.breweries().length; i++) {
-		    	viewModel.breweries()[i].marker.setMap(map); 
-			};
-		},
-
+		// Remove all markers from the map.
 		removeMarkers: function() {
 		  for(var i = 0; i < viewModel.breweries().length; i++) {
 		    viewModel.breweries()[i].marker.setMap(null);
 		  };
-		},
-
-		toggleBounce: function() {
-			if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-			} else {
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-			}
 		},
 
 		// Show and hide the filter input field and list of breweries.
