@@ -16,11 +16,8 @@ function app() {
 		google.maps.event.addListener(self.marker, 'click', function() {
 			infowindow.setContent('<div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
 			infowindow.open(map, this);
-			if (self.marker.getAnimation() !== null) {
-			    self.marker.setAnimation(null);
-			} else {
-			    self.marker.setAnimation(google.maps.Animation.BOUNCE);
-			}
+		    self.marker.setAnimation(google.maps.Animation.BOUNCE);
+		    setTimeout(function(){ self.marker.setAnimation(null) }, 3000);
 		});
 	}
 
