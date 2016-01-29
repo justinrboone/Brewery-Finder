@@ -1,4 +1,6 @@
 function app() {
+
+	
 	
 	// Create brewery objects.
 	var Brewery = function(data) {
@@ -14,7 +16,8 @@ function app() {
 		});
 		
 		google.maps.event.addListener(self.marker, 'click', function() {
-			infowindow.setContent('<div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
+			infowindow.setContent('<div><img src="https://maps.googleapis.com/maps/api/streetview?size=300x150&location='+self.address+'"></div><div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
+			map.panTo(self.marker.getPosition());
 			infowindow.open(map, this);
 		    self.marker.setAnimation(google.maps.Animation.BOUNCE);
 		    setTimeout(function(){ self.marker.setAnimation(null) }, 3000);
@@ -30,7 +33,7 @@ function app() {
 	// Create the map.
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center: seattle,
-		zoom: 12,
+		zoom: 11,
 		scrollwheel: false
 		});
 
@@ -41,7 +44,7 @@ function app() {
 	var service = new google.maps.places.PlacesService(map);
 		service.nearbySearch({
 			location: seattle,
-			radius: 7500,
+			radius: 20000,
 			keyword: ['brewery']
 		}, callback);
 
@@ -53,7 +56,16 @@ function app() {
 			}
 			viewModel.createList();
 		}
-	}	
+	}
+
+	// Set height of map and list-view divs to viewport height
+	function windowH() {
+	   var wH = $(window).height();
+
+	   $('#map-container, #list-view').css({height: wH});
+	}
+
+
 
 	// ViewModel
 	var viewModel = {
@@ -83,6 +95,11 @@ function app() {
 		  	}
 		},
 
+		activateMarker: function(marker) {
+			infowindow.setContent('<div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
+			infowindow.open(map, this);
+		},
+
 		// Remove all markers from the map.
 		removeMarkers: function() {
 		  for(var i = 0; i < viewModel.breweries().length; i++) {
@@ -97,8 +114,10 @@ function app() {
 		}
 	}
 
+	windowH();	
 	ko.applyBindings(viewModel);
 	viewModel.query.subscribe(viewModel.search);
+
 }
 
 
