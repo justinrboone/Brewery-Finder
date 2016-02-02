@@ -1,6 +1,4 @@
 function app() {
-
-	
 	
 	// Create brewery objects.
 	var Brewery = function(data) {
@@ -15,6 +13,7 @@ function app() {
 			title: data.name
 		});
 		
+		// Create the infowindow content and activate it when a marker is clicked.
 		google.maps.event.addListener(self.marker, 'click', function() {
 			infowindow.setContent('<div><img src="https://maps.googleapis.com/maps/api/streetview?size=300x150&location='+self.address+'"></div><div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
 			map.panTo(self.marker.getPosition());
@@ -22,10 +21,6 @@ function app() {
 		    self.marker.setAnimation(google.maps.Animation.BOUNCE);
 		    setTimeout(function(){ self.marker.setAnimation(null) }, 3000);
 		});
-
-		activateMarker = function() {
-			self.marker.trigger('click');
-		}
 	}
 
 	// Create an array to store data from Google.
@@ -99,9 +94,9 @@ function app() {
 		  	}
 		},
 
-		activateMarker: function(marker) {
-			infowindow.setContent('<div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
-			infowindow.open(map, this);
+		// Activate the appropriate map marker and infowindow.
+		activateMarker: function() {
+			google.maps.event.trigger(this.marker, 'click');
 		},
 
 		// Remove all markers from the map.
