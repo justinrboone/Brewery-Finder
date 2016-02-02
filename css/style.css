@@ -1,6 +1,8 @@
 
 #nav {
 	opacity: .75;
+	padding-right: 15px;
+	padding-left: 15px;
 }
 
 #map { 
@@ -15,4 +17,3 @@
 	padding-top: 60px;
 	overflow: scroll;
 }
-

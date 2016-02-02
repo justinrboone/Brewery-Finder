@@ -22,6 +22,10 @@ function app() {
 		    self.marker.setAnimation(google.maps.Animation.BOUNCE);
 		    setTimeout(function(){ self.marker.setAnimation(null) }, 3000);
 		});
+
+		activateMarker = function() {
+			self.marker.trigger('click');
+		}
 	}
 
 	// Create an array to store data from Google.
