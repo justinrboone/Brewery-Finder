@@ -1,22 +1,34 @@
+// Display error message if Google Maps API call fails.
+function googleError() {
+	$('#map').append('<div class="alert alert-danger center-block" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><strong> Oh snap!</strong> There was an error loading map data.</div>')
+}
+
 function app() {
 	
 	// Create brewery objects.
 	var Brewery = function(data) {
 		var self = this;
 		self.name = data.name;
-		self.address = data.vicinity;
-		self.rating = data.rating;
+		self.address = data.location.address;
+		self.checkins = data.stats.checkinsCount;
+		self.lat = data.location.lat;
+		self.lng = data.location.lng;
+		self.url = data.url;
 		self.marker = new google.maps.Marker({
-			position: data.geometry.location,
+			position: {lat: self.lat, lng: self.lng},
 			map: map,
 			animation: null,
 			title: data.name
 		});
+
 		
 		// Create the infowindow content and activate it when a marker is clicked.
 		google.maps.event.addListener(self.marker, 'click', function() {
-			infowindow.setContent('<div><img src="https://maps.googleapis.com/maps/api/streetview?size=300x150&location='+self.address+'"></div><div><h5>'+self.name+'</h5></div><div>Address: '+self.address+'</div><div>Rating: '+self.rating+'</div>');
+			infowindow.setContent('<div class="panel panel-primary"><div class="panel-heading"><h3 class="panel-title">'+self.name+'</h3></div><div class="panel-body"><h5>Address: '+self.address+'</h5><h5>Website: <a href="'+self.url+'">'+self.url+'</a></h5><h5>Foursquare Check-ins: '+self.checkins+'</h5></div></div>');
 			map.panTo(self.marker.getPosition());
+			infowindow.setOptions({
+				maxWidth: 300
+			});
 			infowindow.open(map, this);
 		    self.marker.setAnimation(google.maps.Animation.BOUNCE);
 		    setTimeout(function(){ self.marker.setAnimation(null) }, 3000);
@@ -32,29 +44,24 @@ function app() {
 	// Create the map.
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center: seattle,
-		zoom: 11,
+		zoom: 12,
 		scrollwheel: false
 		});
 
 	// Create Info Windows.
 	infowindow = new google.maps.InfoWindow();
 
-	// Request Places data from Google.
-	var service = new google.maps.places.PlacesService(map);
-		service.nearbySearch({
-			location: seattle,
-			radius: 20000,
-			keyword: ['brewery']
-		}, callback);
-
-	// Add Places data to the model (locations array) after it is received.
-	function callback(results, status) {
-		if (status === google.maps.places.PlacesServiceStatus.OK) {
-			for (var i = 0; i < results.length; i++) {
-			  	locations.push((results[i]));
-			}
-			viewModel.createList();
-		}
+	// Request data from Foursquare and handle errors	
+	function loadData() {
+		$.getJSON('https://api.foursquare.com/v2/venues/search?client_id=M5RGL2VT40CIJUOT1MMW1PVDAQPMQDUWDVB0F4XP3S32KBWP&client_secret=KY4UKIQI1HMVBBKXGOV2IRQJ4VTNJ2X2EOWOUAU32YQDASIG&v=20130815&near=Seattle, WA&&radius=5000&query=brewery&sortByDistance=1', function(data) {
+		  	for(var i = 0; i < data.response.venues.length; i++) {
+		  		locations.push(data.response.venues[i]);
+		  	}
+		  	viewModel.createList();
+		}).error(function(e) {
+			viewModel.toggleList();
+			$('#list-view').append('<div class="alert alert-danger center-block" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><strong> Oh snap!</strong> There was an error loading locations data.</div>');
+		});
 	}
 
 	// Set height of map and list-view divs to viewport height
@@ -63,8 +70,6 @@ function app() {
 
 	   $('#map-container, #list-view').css({height: wH});
 	}
-
-
 
 	// ViewModel
 	var viewModel = {
@@ -80,6 +85,8 @@ function app() {
 			for(var x in locations) {
 				viewModel.breweries.push(new Brewery(locations[x]));
 			}
+
+			$('#hamburger-btn').prepend('<span class="badge">'+viewModel.breweries().length+'</span>')
 		},
 
 		// Filter the brewery list and map markers based on user input.
@@ -113,6 +120,7 @@ function app() {
 		}
 	}
 
+	loadData();
 	windowH();	
 	ko.applyBindings(viewModel);
 	viewModel.query.subscribe(viewModel.search);
