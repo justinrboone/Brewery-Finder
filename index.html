@@ -39,7 +39,7 @@
         </form>
         <div class="panel panel-default">
             <div class="panel-heading">Breweries</div>
-            <div class="panel-body list-group" data-bind="foreach: breweries" id="brewery-list">
+            <div class="panel-body list-group" data-bind="foreach: breweries, click: toggleList" id="brewery-list">
                 <a href="#" class="list-group-item" data-bind="text: name, click: $parent.activateMarker"></a>
             </div>
         </div>
