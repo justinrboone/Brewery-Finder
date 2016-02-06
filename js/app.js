@@ -77,7 +77,7 @@ function app() {
         var wH = $(window).height();
 
         $('#map-container, #list-view').css({
-            height: wH
+            height: wH-75
         });
     }
 
