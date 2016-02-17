@@ -6,6 +6,13 @@ function googleError() {
 
 function app() {
 
+    // SETTINGS
+    // Set location for center of map and search.
+    var seattle = {
+        lat: 47.6097,
+        lng: -122.3331
+    };
+
     // Create brewery objects.
     var Brewery = function(data) {
         var self = this;
@@ -44,11 +51,7 @@ function app() {
     // Create an array to store data from Google.
     var locations = [];
 
-    // Set location for center of map and search.
-    var seattle = {
-        lat: 47.6097,
-        lng: -122.3331
-    };
+    
 
     // Create the map.
     var map = new google.maps.Map(document.getElementById('map'), {
