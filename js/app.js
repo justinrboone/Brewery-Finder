@@ -1,6 +1,7 @@
 // Display error message if Google Maps API call fails.
+"use strict";
 function googleError() {
-    $('#map').append('<div class="alert alert-danger center-block" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><strong> Oh snap!</strong> There was an error loading map data.</div>')
+    $('#map').append('<div class="alert alert-danger center-block" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><strong> Oh snap!</strong> There was an error loading map data.</div>');
 }
 
 function app() {
@@ -35,10 +36,10 @@ function app() {
             infowindow.open(map, this);
             self.marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
-                self.marker.setAnimation(null)
+                self.marker.setAnimation(null);
             }, 3000);
         });
-    }
+    };
 
     // Create an array to store data from Google.
     var locations = [];
@@ -57,13 +58,13 @@ function app() {
     });
 
     // Create Info Windows.
-    infowindow = new google.maps.InfoWindow();
+    var infowindow = new google.maps.InfoWindow();
 
-    // Request data from Foursquare and handle errors	
+    // Request data from Foursquare and handle errors
     function loadData() {
         $.getJSON('https://api.foursquare.com/v2/venues/search?client_id=M5RGL2VT40CIJUOT1MMW1PVDAQPMQDUWDVB0F4XP3S32KBWP&client_secret=KY4UKIQI1HMVBBKXGOV2IRQJ4VTNJ2X2EOWOUAU32YQDASIG&v=20130815&near=Seattle, WA&&radius=5000&query=brewery&sortByDistance=1', function(data) {
-            for (var i = 0; i < data.response.venues.length; i++) {
-                locations.push(data.response.venues[i]);
+            for (var x in data.response.venues) {
+                locations.push(data.response.venues[x]);
             }
             viewModel.createList();
         }).error(function(e) {
